@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Kanboard commit-msg hook. Detect and validate issue ids.
+
+exec php .git/hooks/kanboard/checkin.php --validate $(git rev-parse HEAD HEAD~1) <$1

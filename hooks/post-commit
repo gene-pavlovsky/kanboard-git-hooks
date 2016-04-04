@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# Kanboard post-commit hook. Detect issue ids and update (add comment, optionally close) the referenced issues.
+
+REPO=$(basename "$(pwd)")
+GITWWW="http://localhost/gitlist/index.php/$REPO/commit/%H"
+
+{
+	git log -1 --pretty='commit [%h]('"$GITWWW"')%n%n```%n%B```%n'
+	git show --shortstat | tail -n 1
+} | exec php .git/hooks/kanboard/checkin.php $(git rev-parse HEAD HEAD~1)
