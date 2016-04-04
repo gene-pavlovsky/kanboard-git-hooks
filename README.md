@@ -9,7 +9,9 @@ Description
 Provides git hooks for integration with [Kanboard](http://kanboard.net/).
 Automatically post comments and optionally close Kanboard tasks by referencing them in git commit messages. 
 ```
-Mention single issue #55. Mention tasks #77, #78, and #79. Mention more bugs #123, #124 and #125 and some more separate ones: Feature #45, ticket #46 and bug #47.
+Mention single issue #55. Mention tasks #77, #78, and #79.
+Mention more bugs #123, #124 and #125 and separate ones:
+Feature #45, ticket #46 and bug #47.
 
 Closes task #202
 Fixed ticket #123
