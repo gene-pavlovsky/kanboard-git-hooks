@@ -1,14 +1,14 @@
 <?php
 
 # Set your Kanboard API URL and token. They can be found in `Settings > API`, e.g.:
-# http://localhost/kanboard/?controller=config&action=api
+# http://dev.example.com/kanboard/?controller=config&action=api
 #
 # Matching TortoiseGit issue tracker URL (`Settings > Hook Scripts > Issue Tracker Config`).
 # Copy&paste the next line into `bugtraq.url`, without the comment hash and leading whitespace.
-# 	http://localhost/kanboard/?controller=task&action=show&task_id=%BUGID%
+# 	http://dev.example.com/kanboard/?controller=task&action=show&task_id=%BUGID%
 #
 # API endpoint
-$api_url = 'http://localhost/kanboard/jsonrpc.php';
+$api_url = 'http://dev.example.com/kanboard/jsonrpc.php';
 # API token
 $api_token = '317bf42ed0cbf4f0e83cf6b6e13c3b4f024ff214d7ba562924035cc4cf607826';
 
