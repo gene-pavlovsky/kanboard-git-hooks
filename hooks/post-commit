@@ -3,7 +3,7 @@
 # Kanboard post-commit hook. Detect issue ids and update (add comment, optionally close) the referenced issues.
 
 REPO=$(basename "$(pwd)")
-GITWWW="http://localhost/gitlist/index.php/$REPO/commit/%H"
+GITWWW="http://dev.example.com/gitlist/index.php/$REPO/commit/%H"
 
 {
 	git log -1 --pretty='commit [%h]('"$GITWWW"')%n%n```%n%B```%n'
