@@ -26,7 +26,7 @@ The hooks are written in `bash`, the Kanboard interface script in `php` using [f
 - `hooks/post-commit` posts comments and optionally closes Kanboard tasks. If commit is amended, attempts to amend the task comment.
 
 Downloads
-------------
+---------
 [Complete ZIP of the repository](https://github.com/gene-pavlovsky/kanboard-git-hooks/archive/master.zip)
 
 Installation
