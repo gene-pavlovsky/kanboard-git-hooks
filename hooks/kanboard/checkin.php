@@ -192,7 +192,7 @@ else {
 			}
 		}
 		# Print amended issue ids.
-		if (count($issue_ids))
+		if (count($amended_issue_ids))
 			echo 'Amended issues: ' . implode(', ', array_map($hash_tag, $amended_issue_ids)) . ".\n";
 		else
 			echo "No amended issues.\n";
