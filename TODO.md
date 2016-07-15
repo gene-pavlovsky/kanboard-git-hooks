@@ -1,0 +1,1 @@
+- If a commit that previously closed an issue is amended, and the issue is not mentioned as closed anymore, reopen the issue (move to the specified column).

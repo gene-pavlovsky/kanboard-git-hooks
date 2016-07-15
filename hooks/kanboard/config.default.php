@@ -4,14 +4,14 @@
 #
 # Matching TortoiseGit regular expressions (`Settings > Hook Scripts > Issue Tracker Config`).
 # Copy&paste the next two lines into `bugtraq.logregex`, without the comment hash and leading whitespace.
-# 	\b([Ff]eatures?|[Bb]ugs?|[Ii]ssues?|[Tt]ickets?|[Tt]asks?|[Ii]mplement(ed|s)|[Ff]ix(ed|es)|[Cc]los(ed|es))(\s+|:\s*)(#\d+((\s*,\s*|\s+and\s+|\s+)#\d+)*)\b
+# 	#\d+\b
 # 	\d+
 #
-# Related issues (including issues marked as closed).
-$issue_ids_regexp = '/\b (?: feature | bug | issue | ticket | task)s? (?: \s+ | : \s*) (\#\d+ (?: (?: \s* , \s* | \s+ and \s+ | \s+) \#\d+)*) \b/xi';
-# Issues marked as closes.
-$closed_issue_ids_regexp = '/\b (?: implement(?: ed|s) | fix(?: ed|es) | clos(?: ed|es)) (?: \s+ (?: feature | bug | issue | ticket | task)s?)? (?: \s+ | : \s*) (\#\d+ (?: (?: \s* , \s* | \s+ and \s+ | \s+) \#\d+)*) \b/xi';
-# Issue ids (within matches of the previous two regular expressions).
+# Mentioned issues.
+$issue_ids_regexp = '/\#(\d+)\b/';
+# Issues marked as closed.
+$closed_issue_ids_regexp = '/\b (?: close(?: s|d)? | fix(?: es|ed)? | resolve(?: s|d)? | implement(?: s|ed)?) (?: \s+ (?: feature | bug | issue | ticket | task)s?)? (?: \s+ | : \s*) (\#\d+ (?: (?: \s* , \s* | \s+ and \s+ | \s+) \#\d+)*) \b/xi';
+# Issue IDs (within matches of the previous two regular expressions).
 $single_issue_id_regexp = '/\d+/';
 
 # Regular expression used to detect git commit hashes (SHA-1) in commit comments received from the post-commit git hook.

@@ -7,18 +7,20 @@ Description
 -----------
 
 Provides git hooks for integration with [Kanboard](http://kanboard.net/).
-Automatically post comments and optionally close Kanboard tasks by referencing them in git commit messages. 
-```
-Mention single issue #55. Mention tasks #77, #78, and #79.
-Mention more bugs #123, #124 and #125 and separate ones:
-Feature #45, ticket #46 and bug #47.
-
-Closes task #202
-Fixed ticket #123
-Resolves bug #88.
-Implements feature #69.
-Closes issue #99.
-```
+Automatically post comments and optionally close Kanboard tasks by referencing them in git commit messages, similar to [GitHub](https://help.github.com/articles/closing-issues-via-commit-messages/).
+Issue numbers can be referenced as `#69`. The following keywords will close an issue via commit message:
+- close
+- closes
+- closed
+- fix
+- fixes
+- fixed
+- resolve
+- resolves
+- resolved
+- implement
+- implements
+- implemented
 
 The hooks are written in `bash`, the Kanboard interface script in `php` using [fguillot/JsonRPC](https://github.com/fguillot/JsonRPC).
 
