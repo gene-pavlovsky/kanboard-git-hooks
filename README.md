@@ -24,7 +24,7 @@ Issue numbers can be referenced as `#69`. The following keywords will close an i
 
 The hooks are written in `bash`, the Kanboard interface script in `php` using [fguillot/JsonRPC](https://github.com/fguillot/JsonRPC).
 
-- `hooks/commit-msg` detects task ids in the commit message and checks if they exist in Kanboard and belong to the correct project. If validation fails, commit is aborted.
+- `hooks/commit-msg` detects task IDs in the commit message and checks if they exist in Kanboard and belong to the correct project. If validation fails, commit is aborted.
 - `hooks/post-commit` posts comments and optionally closes Kanboard tasks. If commit is amended, attempts to amend the task comment.
 
 Downloads

@@ -66,7 +66,7 @@ if ($validate) {
 		echo "No related issues.\n";
 		exit(0);
 	}
-	# Print detected issue ids.
+	# Print detected issue IDs.
 	if (count($touched_ids))
 		echo 'Touched issues: ' . implode(', ', array_map($hash_tag, $touched_ids)) . ".\n";
 	if (count($closed_issue_ids))
@@ -146,14 +146,14 @@ if ($validate) {
 		$batch->getTask($issue_id);
 	$issues = $batch->send();
 
-	# Validate all issue ids.
+	# Validate all issue IDs.
 	foreach ($issues as $batch_id => $issue) {
 		if (!$issue)
 			quit('Issue #' . $client->batch[$batch_id]['params'][0] . ' not found.', 1);
 		if ($issue['project_id'] != $project_id)
 			quit('Issue #' . $client->batch[$batch_id]['params'][0] . ' belongs to project #' . $issue['project_id'] . '.', 1);
 	}
-	echo "Validated issue ids.\n";
+	echo "Validated issue IDs.\n";
 }
 else {
 	if ((count($head) >= 2) && (count($old_head) >= 2) && ($head[1] == $old_head[1])) {
@@ -191,7 +191,7 @@ else {
 				}
 			}
 		}
-		# Print amended issue ids.
+		# Print amended issue IDs.
 		if (count($amended_issue_ids))
 			echo 'Amended issues: ' . implode(', ', array_map($hash_tag, $amended_issue_ids)) . ".\n";
 		else

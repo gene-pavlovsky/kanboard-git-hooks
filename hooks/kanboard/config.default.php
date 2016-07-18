@@ -1,6 +1,6 @@
 <?php
 
-# Regular expressions used to detect issue ids in commit messages.
+# Regular expressions used to detect issue IDs in commit messages.
 #
 # Matching TortoiseGit regular expressions (`Settings > Hook Scripts > Issue Tracker Config`).
 # Copy&paste the next two lines into `bugtraq.logregex`, without the comment hash and leading whitespace.

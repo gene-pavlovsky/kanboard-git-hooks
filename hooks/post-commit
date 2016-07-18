@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-# Kanboard post-commit hook. Detect issue ids and update (add comment, optionally close) the referenced issues.
+# Kanboard post-commit hook. Detects issue IDs and updates (adds a comment, optionally closes) the referenced issues.
+#
 
 REPO=$(basename "$(pwd)")
 GITWWW="http://dev.example.com/gitlist/index.php/$REPO/commit/%H"
