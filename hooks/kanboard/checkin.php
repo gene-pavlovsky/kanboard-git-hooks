@@ -26,6 +26,12 @@ function quit($message, $code = 0) {
 	exit($code);
 }
 
+function debug($message) {
+	if (isset($debug) && $debug === true){
+		fwrite(STDERR, $message . "\n");
+	}
+}
+
 function match_issues($regexp, $issue_regexp, $line, &$issue_ids) {
 	if (preg_match_all($regexp, $line, $matches)) {
 		$count = count($matches[0]);
@@ -95,9 +101,14 @@ require __DIR__ . '/vendor/autoload.php';
 use JsonRPC\Client;
 
 $client = new Client($api_url);
-$client->authentication('jsonrpc', $api_token);
+if (isset($api_token) && $api_token != ""){
+	$client->authentication('jsonrpc', $api_token);
+}
+else if (isset($username) && $username != "" && isset($user_api_token) && $user_api_token != ""){
+	$client->authentication($username, $user_api_token);
+}
 
-$checksum = md5($project_name . "\n" . $close_column_title . "\n" . $user_email);
+$checksum = md5($project_name . "\n" . $close_column_title . "\n" . $user_email . "\n" . (isset($username) ? $username : ""));
 if ($cache_filepath && file_exists($cache_filepath)) {
 	# Load and decode cached data (if exists).
 	$cache_str = file_get_contents($cache_filepath);
@@ -113,16 +124,15 @@ if (isset($cache_data) && ($cache_data['checksum'] == $checksum)) {
 }
 else {
 	# Get the project id.
+	debug("getting project info");
 	$project = $client->getProjectByName($project_name);
 	if (!$project)
 		quit('Project "' . $project_name . '" not found.', 1);
 	$project_id = $project['id'];
 	
-	# Get columns and users.
-	$batch = $client->batch();
-	$batch->getColumns($project_id);
-	$batch->getAllUsers();
-	list($columns, $users) = $batch->send();
+	# Get columns.
+	debug("getting columns");
+	$columns = $client->getColumns($project_id);
 	
 	# Get the column id for moving closed issues to.
 	if (($key = array_search($close_column_title, array_column($columns, 'title'))) === false)
@@ -130,29 +140,50 @@ else {
 	$column_id = $columns[$key]['id'];
 	
 	# Get the user id for posting comments.
-	if (($key = array_search($user_email, array_column($users, 'email'))) === false)
-		quit('User "' . $user_email . '" not found.', 1);
-	$user_id = $users[$key]['id'];
+	$user_id = null;
+	
+	if (isset($api_token) && $api_token){
+		/* get userid by email */
+		debug("get user by email");
+		$users = $client->getAllUsers();
+		if (($key = array_search($user_email, array_column($users, 'email'))) === false)
+			quit('User "' . $user_email . '" not found.', 1);
+		$user_id = $users[$key]['id'];
+	}
+	else if(isset($username)){
+		debug("get current user");
+		$user = $client->getMe();
+		if (!$user)
+			quit('User "' . $username . '" not found.', 1);
+		
+		$user_id = $user['id'];
+	}
+	
 	
 	# Encode and save cached data.
 	$cache_data = array('checksum' => $checksum, 'project_id' => $project_id, 'column_id' => $column_id, 'user_id' => $user_id);
 	file_put_contents($cache_filepath, json_encode($cache_data, JSON_PRETTY_PRINT) . "\n");
-	echo "Received project info.\n";
+	debug("Received project info.");
 }
 
-if ($validate) {
-	$batch = $client->batch();
-	foreach ($issue_ids as $issue_id)
-		$batch->getTask($issue_id);
-	$issues = $batch->send();
+$tasks = Array();
+$batch = $client->batch();
+foreach ($issue_ids as $issue_id)
+	$batch->getTask($issue_id);
+$issues = $batch->send();
 
-	# Validate all issue IDs.
-	foreach ($issues as $batch_id => $issue) {
+# Validate all issue IDs.
+foreach ($issues as $batch_id => $issue) {
+	if ($validate) {
 		if (!$issue)
 			quit('Issue #' . $client->batch[$batch_id]['params'][0] . ' not found.', 1);
 		if ($issue['project_id'] != $project_id)
 			quit('Issue #' . $client->batch[$batch_id]['params'][0] . ' belongs to project #' . $issue['project_id'] . '.', 1);
 	}
+	$tasks[$issue['id']] = $issue;
+}
+
+if($validate){
 	echo "Validated issue IDs.\n";
 }
 else {
@@ -206,7 +237,12 @@ else {
 		$batch->createComment($issue_id, $user_id, $post_comment);
 	}
 	foreach ($closed_issue_ids as $issue_id) {
-		$batch->moveTaskPosition($project_id, $issue_id, $column_id, 1);
+		if(isset($tasks[$issue_id]['swimlane_id'])){			
+			$batch->moveTaskPosition($project_id, $issue_id, $column_id, 1, $tasks[$issue_id]['swimlane_id']);
+		}
+		else{
+			$batch->moveTaskPosition($project_id, $issue_id, $column_id, 1);
+		}
 		$batch->createComment($issue_id, $user_id, $close_issue_comment);
 	}
 	$results = $batch->send();

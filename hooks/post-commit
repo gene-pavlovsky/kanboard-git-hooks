@@ -7,6 +7,6 @@ REPO=$(basename "$(pwd)")
 GITWWW="http://dev.example.com/gitlist/index.php/$REPO/commit/%H"
 
 {
-	git log -1 --pretty='commit [%h]('"$GITWWW"')%n%n```%n%B```%n'
+	git log -1 --pretty='commit [%h]('"$GITWWW"')%n%n```%n%B%n```%n'
 	git show --shortstat | tail -n 1
 } | exec php .git/hooks/kanboard/checkin.php $(git rev-parse HEAD HEAD~1)
